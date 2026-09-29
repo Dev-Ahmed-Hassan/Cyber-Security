@@ -38,7 +38,7 @@ Auditing other included files highlighted the need to differentiate proprietary 
 * Files like `polyfills.js` or `zone.js` handle asynchronous execution and browser compatibility, containing zero custom business logic.
 * UI bundles like BeerCSS (`beer.min.js`) handle client-side rendering, styling tokens, and DOM manipulation rather than server data flow.
 
-The rules and indicators used to triage these files have been documented in the testing methodology reference at [`js_file_testing_methodology.md`](../../../../notes/web-security/pentesting_methodology/js_file_testing_methodology.md).
+The rules and indicators used to triage these files have been documented in the testing methodology reference at [`js_file_testing_methodology.md`](../../../../../notes/web-security/pentesting_methodology/js_file_testing_methodology.md).
 
 ---
 
