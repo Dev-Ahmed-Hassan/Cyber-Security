@@ -1,2 +1,4 @@
 ## What to write here
-frontend/backend tech, versions, anything from JS bundle
+It is using Angular but i don't have any idea of how to identify the tech stack and how would that help me in future.
+
+
