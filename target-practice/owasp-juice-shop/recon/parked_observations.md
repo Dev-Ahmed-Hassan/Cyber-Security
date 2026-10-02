@@ -2,6 +2,10 @@
 I will just write Observations here in this one liner format 
 
 
+### Stuff to Test Later
+* There are 25 users before me already... their emails can be enumerated... or passwords as well
+
+
 ### Authentication Observations
 
 * It has a password reset page, but in that page, it requires an email and a security question. The email is checked everytime a character is changed (!) t

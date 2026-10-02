@@ -47,3 +47,57 @@ The rules and indicators used to triage these files have been documented in the 
 All non-blocking insights, unusual parameter conventions (such as credentials passed via `GET` query parameters), and potential user enumeration vectors were cataloged in [`parked_observations.md`](../../../recon/parked_observations.md). 
 
 With the attack surface mapped and the baseline behavior established, the next phase will transition from passive reconnaissance to focused vulnerability assessments across the identified authentication workflows.
+
+## 5. Email Address Enumeration via Product Reviews
+
+During manual review of the product catalog, it was observed that user-submitted reviews display the reviewer's email address in the `author` field rather than a username or display name. This constitutes an information disclosure vulnerability, as it exposes valid account identifiers that can subsequently be leveraged for credential-stuffing or password-spraying attacks against the authentication endpoint.
+
+Based on account ID sequencing (the test account created during registration was assigned ID 25, with the following registration receiving ID 26), it can be inferred that 24 accounts existed prior to the test account. This figure represents the upper bound of registered users at the time of testing, not necessarily the number of users who authored reviews.
+
+### Methodology
+
+Reviews are retrieved on a per-product basis via `GET /rest/products/{id}/reviews`, returning a JSON payload containing an array of review objects, each including an `author` field. With 46 products in the catalog, enumerating all reviews requires iterating across product IDs 1 through 46.
+
+To avoid the overhead and fragility of regex-based extraction against raw response text, the JSON response was parsed directly using Python's `requests` library, indexing into the structured `data` field of each response. This approach is both more reliable and less error-prone than pattern matching, since the API returns well-formed JSON rather than embedding emails in unstructured HTML.
+
+A custom script was written to iterate across all product IDs, extract the `author` field from each review, and deduplicate results into a single list of unique email addresses:
+
+```python
+import requests
+
+base_URL = 'http://localhost:3000'
+emails = []
+
+def get_reviews(n):
+	response = requests.get(f"{base_URL}/rest/products/{n}/reviews")
+	return response
+
+
+for i in range(1, 47):
+	resp = get_reviews(i)
+	data = resp.json()
+	reviews = data['data']
+
+	for review in reviews:
+		if review['author'] not in emails:
+			emails.append(review['author'])
+
+print(f"[+] Total unique email addresses found: {len(emails)}")
+print(emails)
+```
+
+### Results
+
+The script returned 12 unique email addresses:
+
+```text
+[+] Total unique email addresses found: 12
+['admin@juice-sh.op', 'basil@juice-sh.op', 'uvogin@juice-sh.op', 'bender@juice-sh.op', 'mc.safesearch@juice-sh.op', 'jim@juice-sh.op', 'morty@juice-sh.op', 'bjoern@owasp.org', 'stan@juice-sh.op', 'accountant@juice-sh.op', 'wurstbrot@juice-sh.op', 'J12934@juice-sh.op']
+```
+
+This figure is lower than the inferred total of 24 pre-existing accounts, which is expected: the review-based enumeration method only surfaces accounts belonging to users who have authored at least one product review, and therefore represents a subset of all valid accounts rather than an exhaustive list. Accounts that never left a review remain undiscovered through this vector and would require a separate enumeration technique (e.g., abusing the login or password-reset endpoints for user-existence signals).
+
+### Next Steps
+
+These 12 confirmed-valid email addresses will be used as a target list for password enumeration via `ffuf`, fuzzing against the login endpoint with a common password wordlist to identify weak or default credentials.
+
