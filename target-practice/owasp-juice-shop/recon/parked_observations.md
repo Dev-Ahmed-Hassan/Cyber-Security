@@ -5,6 +5,7 @@ I will just write Observations here in this one liner format
 ### Stuff to Test Later
 * There are 25 users before me already... their emails can be enumerated... or passwords as well
 
+* interesting thing, that the items have a review section. This section displays reviews with reference to the email itself. and a very very simple recon showed me an admin email with a review. I can note down the valid accounts and enumerate their passwords this way i think. 
 
 ### Authentication Observations
 
