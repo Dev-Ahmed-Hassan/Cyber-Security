@@ -26,7 +26,7 @@ The intercepted routes and request behaviors were documented in [`endpoint_map.m
 After establishing the dynamic baseline, static inspection was conducted on JavaScript bundles loaded by the browser (such as `main.js`, `polyfills.js`, and vendor files) to uncover endpoints, API routes, and hidden application logic not directly exposed through the UI.
 
 ### Custom Automation
-To parse large minified bundles without relying on manual searches, a custom Python extraction utility—located at [`scripts/js_endpoints_crawler.py`](../../../../scripts/js_endpoints_crawler.py)—was developed. The script:
+To parse large minified bundles without relying on manual searches, a custom Python extraction utility—located at [`scripts/js_endpoints_crawler.py`](../../../../../scripts/js_endpoints_crawler.py)—was developed. The script:
 1. Accepts either a local file path or an application URL (automatically fetching remote assets).
 2. Extracts API namespaces (`/rest/`, `/api/`) and Angular routing paths using regex rules tailored for ES6 template literals (backticks) and string concatenations.
 3. Formats and organizes discovered endpoints into a structured report.
