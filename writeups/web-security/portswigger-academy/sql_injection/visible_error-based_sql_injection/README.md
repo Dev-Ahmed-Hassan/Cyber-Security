@@ -7,7 +7,7 @@
 > **Goal:** Exploit the error based SQL injection vulnerability, in the lab to find the password for user `administrator`.
 
 # My Approach 
-At first I induced a database erorr by introducing by trying an equality comparison between the password and an integer. 
+At first I induced a database erorr by trying an equality comparison between the password and an integer. 
 
 ![First error induction](images/1.png)
 
@@ -32,8 +32,8 @@ Note: The above query also had a syntax error, I didn't add any boolean expressi
 
 
 Now, I did two things:
-[-] I reduced the length to acceptable limit by stripping off the tracking id's value.
-[-] Stripping off the WHERE clause in the injected SQL.
+- [X] I reduced the length to acceptable limit by stripping off the tracking id's value.
+- [X] Stripping off the WHERE clause in the injected SQL.
 
 New query was
 ```text
@@ -67,11 +67,11 @@ ERROR: invalid input syntax for type integet: "administrator"
 
 # Vulnerability Summary
 This vulnerability arises from not handling database errors gracefully and letting them show on the frontend. This introduces vulnerabilities like visible error-based sql injection often allowing attackers to do two things:
-[-] See the structure of the SQL request going to the database.
-[-] Access sensitive information from the database.
+- [X] See the structure of the SQL request going to the database.
+- [X] Access sensitive information from the database.
 
 Both of which we viewed in this example. 
 
 # Preventions
-[-] Use parametarized sql queries to prevent the injection.
-[-] Don't let database errors show on the UI, instead show generic error messages on frontend that doesn't reveal any information. 
+- [X] Use parametarized sql queries to prevent the injection.
+- [X] Don't let database errors show on the UI, instead show generic error messages on frontend that doesn't reveal any information. 
